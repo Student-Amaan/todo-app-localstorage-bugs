@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     tasks.push(newTask);
     setItems();
+    randerTask(newTask);
     inputField.value = "";
     console.log(tasks);
   });
@@ -27,10 +28,24 @@ document.addEventListener("DOMContentLoaded", () => {
   function randerTask(task) {
     const li = document.createElement("li");
     li.setAttribute("data-id", task.id);
+    if (task.completed) li.classList.add("completed");
     li.innerHTML = `<span>${task.Text}</span>
       <button>delete</button>
       `;
     addtask.appendChild(li);
+    li.addEventListener("click", (e) => {
+      if (e.target.tagName === "BUTTON") return;
+      task.completed = !task.completed;
+      li.classList.toggle("completed");
+      setItems();
+    });
+
+    li.querySelector("button").addEventListener("click", (e) => {
+      e.stopPropagation();
+      tasks = tasks.filter((t) => t.id !== task.id);
+      li.remove();
+      setItems();
+    });
   }
 
   function setItems() {
